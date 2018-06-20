@@ -1,0 +1,228 @@
+{% extends "header.html" %}
+{% block title %}Menadżer użytkowników{% endblock %}
+{% block content %}
+    {{ super() }}
+
+        <!-- PAGE CONTENT-->
+        <div class="page-content--bgf7">
+            <!-- BREADCRUMB-->
+            <section class="au-breadcrumb2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="au-breadcrumb-content">
+                                <div class="au-breadcrumb-left">
+                                    <span class="au-breadcrumb-span">Jesteś tutaj:</span>
+                                    <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                        <li class="list-inline-item active">
+                                            <a href="{{ url_for('dashboard') }}">Panel sterowania</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END BREADCRUMB-->
+
+            <!-- WELCOME-->
+            <section class="welcome p-t-10">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="title-4">Witaj
+                                <span>{{ name }}</span>
+                            </h1>
+                            <hr class="line-seprate">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END WELCOME-->
+
+            <!-- STATISTIC-->
+            <section class="statistic statistic2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--green">
+                                <h2 class="number">10,368</h2>
+                                <span class="desc">members online</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-account-o"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--orange">
+                                <h2 class="number">0</h2>
+                                <span class="desc">Zbliżające terminy przeglądów</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-calendar-remove"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--blue">
+                                <h2 class="number">1,086</h2>
+                                <span class="desc">this week</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-calendar-note"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--red">
+                                <h2 class="number">0</h2>
+                                <span class="desc">Liczba incydentów</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-fire"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END STATISTIC-->
+
+        <!-- Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="container">
+                    <div class="sufee-alert alert with-close alert-{{ category }} alert-dismissible fade show">
+                       {{ message }}
+                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                       </button>
+                   </div>
+                   </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        <!-- End Flash -->
+
+              <!-- DATA TABLE -->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                            <div class="col-md-12">
+                                <h3 class="title-5 m-b-35">użytkownicy</h3>
+                                <div class="table-data__tool">
+                                    <form class="au-form-icon--sm" action="{{ url_for('user_manager_search') }}" method="post">
+                                                <input class="au-input--w300 au-input--style2" name="search" type="text" placeholder="Wyszukaj użytkownika">
+                                                    <button class="au-btn--submit2" type="submit">
+                                                    <i class="zmdi zmdi-search"></i>
+                                                    </button>
+                                                </form>
+                                    <div class="table-data__tool-left">
+                                        <div class="rs-select2--light rs-select2--md">
+                                            <select class="js-select2" name="property">
+                                                <option selected="selected">Filtry</option>
+                                                <option value="" >Nazwisko</option>
+                                                <option value="">Imie</option>
+                                            </select>
+                                            <div class="dropDownSelect2"></div>
+                                        </div>
+                                        <div class="rs-select2--light rs-select2--sm">
+                                            <select class="js-select2" name="time">
+                                                <option selected="selected">Today</option>
+                                                <option value="">3 Days</option>
+                                                <option value="">1 Week</option>
+                                            </select>
+                                            <div class="dropDownSelect2"></div>
+                                        </div>
+                                        <button class="au-btn-filter">
+                                            <i class="zmdi zmdi-filter-list"></i>filters</button>
+                                    </div>
+                                    <div class="table-data__tool-right">
+                                        <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick=window.location.href='{{ url_for('register') }}'>
+                                            <i class="zmdi zmdi-plus"></i>dodaj użytkownika</button>
+                                        <button class="au-btn au-btn-icon au-btn--blue au-btn--small" onclick=window.location.href='{{ url_for('users_groups') }}'>
+                                            <i class="zmdi zmdi-plus"></i>zarządzaj grupami</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive table-responsive-data2 table-active">
+                                    <table class="table table-data2">
+                                        <thead>
+                                            <tr>
+                                                <th>Nazwisko</th>
+                                                <th>Imie</th>
+                                                <th>nazwa użytkownika</th>
+                                                <th>email</th>
+                                                <th>uprawnienia</th>
+                                                <th>ostatnio_zalogowany</th>
+                                                <th>zalogowany</th>
+                                                <th>aktywny</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for user in users %}
+                                                    <tr class="tr-shadow">
+                                                        <td>{{ user.surname }}</td>
+                                                        <td>{{ user.first_name }}</td>
+                                                        <td>
+                                                            <span class="block-email">{{ user.username }}</span>
+                                                        </td>
+                                                        <td class="desc">{{ user.email }}</td>
+                                                        {% for srol in sys_roles %}
+                                                            {% for rol in role %}
+                                                                {% if rol.id == srol.id %}
+                                                                    <td>{{ srol.name }}</td>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                            <td>{{ user.last_login }}</td>
+                                                        {% if user.logged_in==True %}
+                                                            <td>
+                                                                <span class="status--process">Tak</span>
+                                                            </td>
+                                                        {% endif %}
+                                                        {% if user.logged_in==False %}
+                                                            <td>
+                                                                <span class="status--denied">Nie</span>
+                                                            </td>
+                                                        {% endif %}
+                                                        {% if user.active==True %}
+                                                            <td>
+                                                                <span class="status--process">Tak</span>
+                                                            </td>
+                                                        {% else %}
+                                                            <td>
+                                                                <span class="status--denied">Nie</span>
+                                                            </td>
+                                                        {% endif %}
+                                                        <td>
+                                                        <div class="table-data-feature">
+                                                            <form action="{{ url_for('user_manager') }}" method="post" class="table-data-feature">
+                                                                <input type="hidden" value="{{ user.id }}" name="edit">
+                                                                <button class="item" type="submit" data-toggle="tooltip" data-placement="top" title="Edytuj">
+                                                                    <i class="zmdi zmdi-edit"></i>
+                                                                </button>
+                                                            </form>
+                                                            <div class="table-data-feature"><font style="opacity: 0">--</font></div>
+                                                            <form action="{{ url_for('user_delete') }}" method="post" class="table-data-feature">
+                                                                <input type="hidden" value="{{ user.id }}" name="delete">
+                                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Usuń">
+                                                                    <i class="zmdi zmdi-delete"></i>
+                                                                </button>
+                                                            </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="spacer"></tr>
+                                    {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+        {% endblock %}
+                                <!-- END DATA TABLE -->
+
+            <!-- END DATA TABLE-->

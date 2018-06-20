@@ -1,0 +1,172 @@
+{% extends "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Dodaj użytkownika{% endblock %}
+{% block content %}
+    {{ super() }}
+
+        <!-- PAGE CONTENT-->
+        <div class="page-content--bgf7">
+            <!-- BREADCRUMB-->
+            <section class="au-breadcrumb2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="au-breadcrumb-content">
+                                <div class="au-breadcrumb-left">
+                                    <span class="au-breadcrumb-span">Jesteś tutaj:</span>
+                                    <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                        <li class="list-inline-item active">
+                                            <a href="{{ url_for('dashboard') }}">Panel główny</a>
+                                        </li>
+                                        <li class="list-inline-item seprate">
+                                            <span>/</span>
+                                        </li>
+                                        <li class="list-inline-item active">
+                                            <a href="{{ url_for('user_manager') }}">Menadżer użytkowników</a>
+                                        </li>
+                                        <li class="list-inline-item seprate">
+                                            <span>/</span>
+                                        </li>
+                                        <li class="list-inline-item">Dodaj użytkownika</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END BREADCRUMB-->
+
+            <!-- STATISTIC-->
+            <section class="statistic statistic2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--green">
+                                <h2 class="number">10,368</h2>
+                                <span class="desc">members online</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-account-o"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--orange">
+                                <h2 class="number">388,688</h2>
+                                <span class="desc">items sold</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-shopping-cart"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--blue">
+                                <h2 class="number">1,086</h2>
+                                <span class="desc">this week</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-calendar-note"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--red">
+                                <h2 class="number">$1,060,386</h2>
+                                <span class="desc">total earnings</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-money"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END STATISTIC-->
+
+                <div class="section__content section__content--p35">
+                    <div class="container">
+                            <div class="row">
+                                    <div class="card-body card-block">
+                                        <form action="/register" method="post" class="">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </div>
+                                                    {{ form.hidden_tag() }}
+                                                       <div class="form-control">
+                                                    {{ wtf.form_field(form.username) }}
+                                                       </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </div>
+                                                       <div class="form-control">
+                                                    {{ wtf.form_field(form.first_name) }}
+                                                       </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </div>
+                                                    <div class="form-control">
+                                                        {{ wtf.form_field(form.surname) }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </div>
+                                                       <div class="form-control">
+                                                    {{ wtf.form_field(form.email) }}
+                                                       </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-asterisk"></i>
+                                                    </div>
+                                                       <div class="form-control">
+                                                    {{ wtf.form_field(form.password) }}
+                                                       </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                <div class="input-group-addon">
+                                                        <i class="fa fa-users"></i>
+                                                    </div>
+                                            <select name="permision" class="form-control-lg form-control">
+                                                       {% for role in roles%}
+                                                         <option value="{{ role.id }}">{{ role.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                            </div>
+                                            </div>
+                                            <div class="form-actions form-group">
+                                                <button type="submit" class="btn btn-success btn-md"><span class="zmdi zmdi-plus"></span> Utwórz użytkownika</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                <div class="card-header statistic__item">
+                                    <font style="opacity: 0">sdasfasfafafas</font>
+                                    <div class="icon">
+                                    <i class="zmdi zmdi-account-add"></i>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+        </section>
+{% endblock %}
+            <!-- END DATA TABLE-->
