@@ -222,6 +222,8 @@ def add_sensor():
 @app.route('/sensor')
 @login_required
 def sensor():
+    sensors = Sensor.query.all()
+
     return render_template('sensor.html', name=current_user.first_name, surname=current_user.surname)
 
 
