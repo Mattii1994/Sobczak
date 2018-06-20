@@ -223,8 +223,9 @@ def add_sensor():
 @login_required
 def sensor():
     sensors = Sensor.query.all()
+    rooms = Rooms.query.all()
 
-    return render_template('sensor.html', name=current_user.first_name, surname=current_user.surname)
+    return render_template('sensor.html', name=current_user.first_name, surname=current_user.surname , sensors=sensors, rooms=rooms)
 
 
 @app.route('/reviews')
