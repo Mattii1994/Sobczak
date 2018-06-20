@@ -224,3 +224,9 @@ def add_sensor():
 def sensor():
     return render_template('sensor.html', name=current_user.first_name, surname=current_user.surname)
 
+
+@app.route('/reviews')
+@login_required
+def review_sensor_list():
+    return render_template('reviews.html', name=current_user.first_name, surname=current_user.surname)
+
