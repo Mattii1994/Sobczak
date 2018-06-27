@@ -14639,3 +14639,10 @@ section {
 .vue-lists ul, .vue-lists ol {
     padding-left: 30px;
 }
+.fill_svg {
+    fill: #ffffff;
+}
+
+.fill_svg:hover{
+    fill: #35d9d1;
+}
