@@ -179,6 +179,14 @@ def user_manager_search():
                            users=finds_users, role=role, sys_roles=sys_roles)
 
 
+@app.route('/account_info')
+@login_required
+def account_info():
+    r_user = RolesUsers.query.filter_by(user_id=current_user.id).first()
+    role = Role.query.filter_by(id=r_user.role_id).first()
+    return render_template('account_info.html', name=current_user.first_name, surname=current_user.surname, role=role.name)
+
+
 @app.route('/sensors_list')
 @login_required
 def sensors_list():
