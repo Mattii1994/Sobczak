@@ -138,9 +138,9 @@
                                     </div>
                                     <div class="table-data__tool-right">
                                         <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick=window.location.href='{{ url_for('register') }}'>
-                                            <i class="zmdi zmdi-plus"></i>dodaj użytkownika</button>
+                                            <i class="zmdi zmdi-plus"></i>dodaj pracownika</button>
                                         <button class="au-btn au-btn-icon au-btn--blue au-btn--small" onclick=window.location.href='{{ url_for('users_groups') }}'>
-                                            <i class="zmdi zmdi-plus"></i>zarządzaj grupami</button>
+                                            <i class="zmdi zmdi-plus"></i>przydziel do pomieszczenia</button>
                                         </div>
                                     </div>
                                 </div>
@@ -161,36 +161,13 @@
                                                         <td>{{ user.first_name }}</td>
                                                         <td>
                                                             {% for worker in workers %}
-                                                            <span class="block-email">{{ user.username }}</span>
-                                                        </td>
-                                                        <td class="desc">{{ user.email }}</td>
-                                                        {% for srol in sys_roles %}
-                                                            {% for rol in role %}
-                                                                {% if rol.id == srol.id %}
-                                                                    <td>{{ srol.name }}</td>
-                                                                {% endif %}
+                                                                {% for room in rooms %}
+                                                                    {% if worker.id_room == room.id_room %}
+                                                            <span class="block-email">Pokój: {{ room.room_number }}; Piętro: {{ room.floor }}</span>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             {% endfor %}
-                                                        {% endfor %}
-                                                            <td>{{ user.last_login }}</td>
-                                                        {% if user.logged_in==True %}
-                                                            <td>
-                                                                <span class="status--process">Tak</span>
-                                                            </td>
-                                                        {% endif %}
-                                                        {% if user.logged_in==False %}
-                                                            <td>
-                                                                <span class="status--denied">Nie</span>
-                                                            </td>
-                                                        {% endif %}
-                                                        {% if user.active==True %}
-                                                            <td>
-                                                                <span class="status--process">Tak</span>
-                                                            </td>
-                                                        {% else %}
-                                                            <td>
-                                                                <span class="status--denied">Nie</span>
-                                                            </td>
-                                                        {% endif %}
+                                                        </td>
                                                         <td>
                                                         <div class="table-data-feature">
                                                             <form action="{{ url_for('user_manager') }}" method="post" class="table-data-feature">

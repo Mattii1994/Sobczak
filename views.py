@@ -193,6 +193,35 @@ def workers_list():
                            users=users, workers=workers, rooms=rooms)
 
 
+@app.route('/workers_list_search', methods=['POST', 'GET'])
+@login_required
+def workers_list_search():
+    role = RolesUsers.query.all()
+    sys_roles = Role.query.all()
+
+    temp = request.form['search']
+    new_temp = ''
+    if temp == '':
+       return redirect(url_for('user_manager'))
+    else:
+        i = 0
+        temp = temp.title()
+
+        for c in temp:
+            if i == 0:
+                new_temp += c
+            else:
+                new_temp += ' '.upper()
+        else:
+            i += 1
+
+        new_temp = new_temp.split()
+        for x in new_temp:
+            finds_users = User.query.filter(User.first_name.like(x) | User.surname.like(x))
+
+    return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname, temp=new_temp,
+                           users=finds_users, role=role, sys_roles=sys_roles)
+
 
 @app.route('/account_info')
 @login_required
