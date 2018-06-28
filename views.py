@@ -77,6 +77,7 @@ def register():
 
 @app.route('/dashboard')
 def dashboard():
+
     return render_template('index3.html', name=current_user.first_name, surname=current_user.surname)
 
 
@@ -101,6 +102,7 @@ def logout():
 def users_groups():
     roles = Role.query.all()
     count_of_users = db.session.query(RolesUsers.role_id, db.func.count(RolesUsers.user_id)).group_by(RolesUsers.role_id).all()
+
     return render_template('groups.html', name=current_user.first_name, surname=current_user.surname,
                            roles=roles, count_of_users=count_of_users)
 
@@ -145,6 +147,7 @@ def user_manager():
     users = User.query.all()
     role = RolesUsers.query.all()
     sys_roles = Role.query.all()
+
     return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname,
                            users=users, role=role, sys_roles=sys_roles)
 
@@ -177,6 +180,18 @@ def user_manager_search():
 
     return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname, temp=new_temp,
                            users=finds_users, role=role, sys_roles=sys_roles)
+
+
+@app.route('/workers_list')
+@login_required
+def workers_list():
+    users = User.query.all()
+    workers = Worker.query.all()
+    rooms = Rooms.query.all()
+
+    return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname,
+                           users=users, role=role, sys_roles=sys_roles)
+
 
 
 @app.route('/account_info')
@@ -239,5 +254,6 @@ def sensor():
 @app.route('/reviews')
 @login_required
 def review_sensor_list():
+
     return render_template('reviews.html', name=current_user.first_name, surname=current_user.surname)
 
