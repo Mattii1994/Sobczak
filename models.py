@@ -30,6 +30,12 @@ class User(UserMixin, db.Model):
     roles = db.relationship('Role', secondary='roles_users', backref=db.backref('users', lazy='dynamic'))
 
 
+class Worker(db.Model):
+    id_ = db.Column(db.Integer, primary_key=True)
+    id_user = db.Column(db.Integer)
+    id_room = db.Column(db.Integer)
+
+
 class Rooms(db.Model):
     id_room = db.Column(db.Integer, primary_key=True)
     room_number = db.Column(db.Integer, unique=True)
