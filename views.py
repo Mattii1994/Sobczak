@@ -190,7 +190,7 @@ def workers_list():
     rooms = Rooms.query.all()
 
     return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname,
-                           users=users, role=role, sys_roles=sys_roles)
+                           users=users, workers=workers, rooms=rooms)
 
 
 
