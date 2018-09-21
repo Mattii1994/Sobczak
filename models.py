@@ -2,8 +2,24 @@ from app import db, app
 
 from flask_login import UserMixin
 from flask_security import Security, SQLAlchemyUserDatastore, RoleMixin
+from sqlalchemy.ext.mutable import Mutable
+from sqlalchemy.dialects.postgresql import ARRAY
 import datetime
 
+
+class MutableList(Mutable, list):
+    def append(self, value):
+        list.append(self, value)
+        self.changed()
+
+    @classmethod
+    def coerce(cls, key, value):
+        if not isinstance(value, MutableList):
+            if isinstance(value, list):
+                return MutableList(value)
+            return Mutable.coerce(key, value)
+        else:
+            return value
 
 class RolesUsers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,9 +47,9 @@ class User(UserMixin, db.Model):
 
 
 class Worker(db.Model):
-    id_ = db.Column(db.Integer, primary_key=True)
+    id_worker = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer)
-    id_room = db.Column(db.Integer)
+    id_rooms = db.Column(MutableList.as_mutable(ARRAY(db.String(100))))
 
 
 class Rooms(db.Model):
@@ -41,6 +57,7 @@ class Rooms(db.Model):
     room_number = db.Column(db.Integer, unique=True)
     floor = db.Column(db.Integer)
     description = db.Column(db.String(255))
+    db.Column(MutableList.as_mutable(ARRAY(db.String(100))))
 
 
 class Sensor(db.Model):
@@ -86,6 +103,7 @@ class Notification(db.Model):
 class TypeofNotification(db.Model):
     id_type = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
+
 
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)

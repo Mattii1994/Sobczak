@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_security import roles_required
 
+import netifaces as net
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -117,6 +118,7 @@ def user_delete():
 
     return redirect(url_for('user_manager'))
 
+
 @app.route('/add_group', methods=['POST', 'GET'])
 @login_required
 def add_group():
@@ -189,7 +191,7 @@ def workers_list():
     workers = Worker.query.all()
     rooms = Rooms.query.all()
 
-    return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname,
+    return render_template('workers_list.html', name=current_user.first_name, surname=current_user.surname,
                            users=users, workers=workers, rooms=rooms)
 
 
@@ -202,7 +204,7 @@ def workers_list_search():
     temp = request.form['search']
     new_temp = ''
     if temp == '':
-       return redirect(url_for('user_manager'))
+       return redirect(url_for('workers_list'))
     else:
         i = 0
         temp = temp.title()
@@ -219,8 +221,23 @@ def workers_list_search():
         for x in new_temp:
             finds_users = User.query.filter(User.first_name.like(x) | User.surname.like(x))
 
-    return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname, temp=new_temp,
+    return render_template('workers_list.html', name=current_user.first_name, surname=current_user.surname, temp=new_temp,
                            users=finds_users, role=role, sys_roles=sys_roles)
+
+
+@app.route('/assign_worker')
+@login_required
+def assign_worker():
+    workers = Worker.query.all()
+    users = User.query.all()
+    rooms = Rooms.query.all()
+
+    if request.method == 'POST':
+        assign = Worker
+
+    return render_template('assign_worker.html',name=current_user.first_name, surname=current_user.surname, workers=workers,
+                           users=users, rooms=rooms)
+    
 
 
 @app.route('/account_info')
@@ -237,7 +254,7 @@ def sensors_list():
     sensors = Sensor.query.all()
     rooms = Rooms.query.all()
 
-    return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname,
+    return render_template('sensors_list.html', name=current_user.first_name, surname=current_user.surname,
                            sensors=sensors, rooms=rooms)
 
 
@@ -286,3 +303,21 @@ def review_sensor_list():
 
     return render_template('reviews.html', name=current_user.first_name, surname=current_user.surname)
 
+
+@app.route('/handler', methods=['POST'])
+def sensor_signal_handler():
+    if request.method == 'POST':
+        ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+        print('OK')
+    return 'OK'
+
+
+def check_sensor_alive():
+    import os
+    sensors_ip = Sensor.query.all()
+    for ip in sensors_ip:
+        response = os.system("ping -c 5 " + ip)
+        if response == 0:
+            ip.alive = True
+        else:
+            ip.alive = False
