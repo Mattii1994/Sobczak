@@ -70,7 +70,7 @@ class Sensor(db.Model):
     ip_address = db.Column(db.String(17))
     last_signal = db.Column(db.DateTime)
     alive = db.Column(db.Boolean)
-    signal = db.Column(db.Boolean)
+    signal = db.Column(db.Boolean, default=False)
 
 
 class Review(db.Model):

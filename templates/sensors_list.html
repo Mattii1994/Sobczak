@@ -86,12 +86,29 @@
             </section>
             <!-- END STATISTIC-->
 
+     <!-- Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="container">
+                    <div class="sufee-alert alert with-close alert-{{ category }} alert-dismissible fade show">
+                       {{ message }}
+                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                       </button>
+                   </div>
+                   </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        <!-- End Flash -->
+
               <!-- DATA TABLE -->
             <div class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
                             <div class="col-md-12">
-                                <h3 class="title-5 m-b-35">użytkownicy</h3>
+                                <h3 class="title-5 m-b-35">czujniki</h3>
                                 <div class="table-data__tool">
                                     <form class="au-form-icon--sm" action="{{ url_for('sensors_list_search') }}" method="post">
                                                 <input class="au-input--w300 au-input--style2" name="search" type="text" placeholder="Wyszukaj czujnik dymu">
@@ -99,26 +116,6 @@
                                                     <i class="zmdi zmdi-search"></i>
                                                     </button>
                                                 </form>
-                                    <div class="table-data__tool-left">
-                                        <div class="rs-select2--light rs-select2--md">
-                                            <select class="js-select2" name="property">
-                                                <option selected="selected">Filtry</option>
-                                                <option value="" >Nazwisko</option>
-                                                <option value="">Imie</option>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
-                                        <div class="rs-select2--light rs-select2--sm">
-                                            <select class="js-select2" name="time">
-                                                <option selected="selected">Today</option>
-                                                <option value="">3 Days</option>
-                                                <option value="">1 Week</option>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
-                                        <button class="au-btn-filter">
-                                            <i class="zmdi zmdi-filter-list"></i>filters</button>
-                                    </div>
                                     <div class="table-data__tool-right">
                                         <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick=window.location.href='{{ url_for('add_sensor') }}'>
                                             <i class="zmdi zmdi-plus"></i>dodaj sensor</button>
@@ -172,8 +169,8 @@
                                                                 </button>
                                                             </form>
                                                             <div class="table-data-feature"><font style="opacity: 0">--</font></div>
-                                                            <form action="{{ url_for('user_delete') }}" method="post" class="table-data-feature">
-                                                                <input type="hidden" value="{{ user.id }}" name="delete">
+                                                            <form action="{{ url_for('sensor_delete') }}" method="post" class="table-data-feature">
+                                                                <input type="hidden" value="{{ sensor.id }}" name="delete">
                                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Usuń">
                                                                     <i class="zmdi zmdi-delete"></i>
                                                                 </button>

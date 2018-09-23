@@ -282,10 +282,30 @@ def sensors_list_search():
             finds_users = User.query.filter(User.first_name.like(x) | User.surname.like(x))
 
 
-@app.route('/add_sensor')
+@app.route('/add_sensor', methods=['POST', 'GET'])
 @login_required
 def add_sensor():
-    return render_template('users_manager.html', name=current_user.first_name, surname=current_user.surname)
+    rooms = Rooms.query.all()
+
+    if request.method == 'POST':
+        if request.form.post['button'] == 'add':
+            temp = request.form['ip'].lower()
+            exist = Sensor.query.filter_by(ip_address=temp).count()
+            if exist == 0:
+                flash(u'Adres IP jest już zajęty!', 'danger')
+                redirect(url_for('add_sensor'))
+
+            """if request.form['description'] == '' or len(request.form['description'] <= 10):
+                flash(u'Opis grupy jest za krótki.', 'danger')
+                redirect(url_for('add_group'))
+            else:"""
+            new_sensor = Sensor(name=request.form['group_name'], description=request.form['description'])
+            db.session.add(new_sensor)
+            db.session.commit()
+            flash(u'Dodano czujnik' + ' ' + request.form['group_name'], 'success')
+            redirect(url_for('users_groups'))
+
+    return render_template('add_sensor.html', name=current_user.first_name, surname=current_user.surname, rooms=rooms)
 
 
 @app.route('/sensor')
@@ -295,6 +315,17 @@ def sensor():
     rooms = Rooms.query.all()
 
     return render_template('sensor.html', name=current_user.first_name, surname=current_user.surname , sensors=sensors, rooms=rooms)
+
+@app.route('/delete_sensor')
+@login_required
+def sensor_delete():
+    sensor_to_delete = Sensor.query.filter_by(id_elem=request.form['']).first()
+
+    db.session.delete(sensor_to_delete)
+    db.session.commit()
+    flash(u'Sensor został pomyślnie usunięty.', 'success')
+
+    return redirect(url_for('sensors_list'))
 
 
 @app.route('/reviews')
@@ -312,7 +343,19 @@ def sensor_signal_handler():
     return 'OK'
 
 
+@app.route('/check_sensor_alive', methods=['POST', 'GET'])
+@login_required
 def check_sensor_alive():
+    import os
+    sensor_ip = request.form['ip']
+    response = os.system("ping -c 5 " + sensor_ip)
+
+    return render_template('check.html', response=response)
+
+
+@app.route('/check_sensors_alive')
+@login_required
+def check_sensors_alive():
     import os
     sensors_ip = Sensor.query.all()
     for ip in sensors_ip:
@@ -321,3 +364,7 @@ def check_sensor_alive():
             ip.alive = True
         else:
             ip.alive = False
+
+        db.session.commit()
+
+    return ip.alive
