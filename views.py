@@ -9,8 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_security import roles_required
 
-import netifaces as net
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -87,6 +85,7 @@ def dashboard():
 def refresh_noti():
     return render_template('noti_info_bar.html')
 
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -114,7 +113,8 @@ def user_delete():
     user = User.query.filter_by(id=request.form['delete']).first()
     db.session.delete(user)
     db.session.commit()
-    flash(u'Użytkownik ' + user.surname + ' ' + user.first_name + ' (' + user.username + ') został pomyślnie usunięty.', 'success')
+    flash(u'Użytkownik ' + user.surname + ' ' + user.first_name + ' (' + user.username + ') został pomyślnie usunięty.',
+          'success')
 
     return redirect(url_for('user_manager'))
 
@@ -288,22 +288,26 @@ def add_sensor():
     rooms = Rooms.query.all()
 
     if request.method == 'POST':
-        if request.form.post['button'] == 'add':
-            temp = request.form['ip'].lower()
+        if request.form['button'] == '+ Dodaj sensor':
+            temp = request.form['ip']
             exist = Sensor.query.filter_by(ip_address=temp).count()
-            if exist == 0:
+            if exist != 0:
                 flash(u'Adres IP jest już zajęty!', 'danger')
                 redirect(url_for('add_sensor'))
-
-            """if request.form['description'] == '' or len(request.form['description'] <= 10):
-                flash(u'Opis grupy jest za krótki.', 'danger')
-                redirect(url_for('add_group'))
-            else:"""
-            new_sensor = Sensor(name=request.form['group_name'], description=request.form['description'])
+            new_sensor = Sensor(sensor_brand=request.form['sensor_brand'], sensor_name=request.form['sensor_name'],
+                                serial_number=request.form['serial_number'], ip_address=request.form['ip'],
+                                id_room=request.form['id_room'], )
             db.session.add(new_sensor)
             db.session.commit()
             flash(u'Dodano czujnik' + ' ' + request.form['group_name'], 'success')
             redirect(url_for('users_groups'))
+
+        elif request.form['button'] == 'Sprawdz':
+            import os
+            sensor_ip = request.form['ip']
+            response = os.system("ping -c 1 " + sensor_ip)
+
+            return render_template('check.html', response=response, sensor_ip=sensor_ip)
 
     return render_template('add_sensor.html', name=current_user.first_name, surname=current_user.surname, rooms=rooms)
 
@@ -314,12 +318,32 @@ def sensor():
     sensors = Sensor.query.all()
     rooms = Rooms.query.all()
 
-    return render_template('sensor.html', name=current_user.first_name, surname=current_user.surname , sensors=sensors, rooms=rooms)
+    return render_template('sensor.html', name=current_user.first_name, surname=current_user.surname, sensors=sensors, rooms=rooms)
+
+
+@app.route('/edit_sensor', methods=['POST', 'GET'])
+@login_required
+def edit_sensor():
+    edited_sensor = Sensor.query.filter_by(id_elem=request.form['edit']).first()
+    rooms = Rooms.query.all()
+
+    if request.method == 'POST':
+        edited_sensor.sensor_brand = request.form['sensor_brand']
+        edited_sensor.sensor_name=request.form['sensor_name']
+        edited_sensor.serial_number=request.form['serial_number']
+        edited_sensor.ip_address=request.form['ip']
+        edited_sensor.id_room=request.form['id_room']
+        edited_sensor.mount_date = request.form['date']
+        db.session.commit()
+        return redirect(url_for(sensors_list))
+
+    return render_template('edit_sensor.html')
+
 
 @app.route('/delete_sensor')
 @login_required
 def sensor_delete():
-    sensor_to_delete = Sensor.query.filter_by(id_elem=request.form['']).first()
+    sensor_to_delete = Sensor.query.filter_by(id_elem=request.form['delete']).first()
 
     db.session.delete(sensor_to_delete)
     db.session.commit()
@@ -348,9 +372,10 @@ def sensor_signal_handler():
 def check_sensor_alive():
     import os
     sensor_ip = request.form['ip']
-    response = os.system("ping -c 5 " + sensor_ip)
 
-    return render_template('check.html', response=response)
+    response = os.system("ping -c 1 " + sensor_ip)
+
+    return render_template('check.html', response=response, sensor_ip=sensor_ip)
 
 
 @app.route('/check_sensors_alive')

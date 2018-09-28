@@ -162,8 +162,8 @@
                                                         {% endif %}
                                                         <td>
                                                         <div class="table-data-feature">
-                                                            <form action="{{ url_for('sensor') }}" method="post" class="table-data-feature">
-                                                                <input type="hidden" value="{{ user.id }}" name="edit">
+                                                            <form action="{{ url_for('edit_sensor') }}" method="post" class="table-data-feature">
+                                                                <input type="hidden" value="{{ sensor.id }}" name="edit">
                                                                 <button class="item" type="submit" data-toggle="tooltip" data-placement="top" title="Edytuj">
                                                                     <i class="zmdi zmdi-edit"></i>
                                                                 </button>
