@@ -1,10 +1,163 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "header.html" %}
+{% block title %}Powiadomienia systemu{% endblock %}
+{% block content %}
+    {{ super() }}
 
-</body>
-</html>
+        <!-- PAGE CONTENT-->
+        <div class="page-content--bgf7">
+            <!-- BREADCRUMB-->
+            <section class="au-breadcrumb2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="au-breadcrumb-content">
+                                <div class="au-breadcrumb-left">
+                                    <span class="au-breadcrumb-span">Jesteś tutaj:</span>
+                                    <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                        <li class="list-inline-item active">
+                                            <a href="{{ url_for('dashboard') }}">Panel sterowania</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END BREADCRUMB-->
+
+            <!-- WELCOME-->
+            <section class="welcome p-t-10">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="title-4">Witaj
+                                <span>{{ name }}</span>
+                            </h1>
+                            <hr class="line-seprate">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END WELCOME-->
+
+            <!-- STATISTIC-->
+            <section class="statistic statistic2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--green">
+                                <h2 class="number">10,368</h2>
+                                <span class="desc">members online</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-account-o"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--orange">
+                                <h2 class="number">0</h2>
+                                <span class="desc">Zbliżające terminy przeglądów</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-calendar-remove"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--blue">
+                                <h2 class="number">1,086</h2>
+                                <span class="desc">this week</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-calendar-note"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--red">
+                                <h2 class="number">0</h2>
+                                <span class="desc">Liczba incydentów</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-fire"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END STATISTIC-->
+
+        <!-- Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="container">
+                    <div class="sufee-alert alert with-close alert-{{ category }} alert-dismissible fade show">
+                       {{ message }}
+                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                       </button>
+                   </div>
+                   </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        <!-- End Flash -->
+
+              <!-- DATA TABLE -->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                            <div class="col-md-12">
+                                <h3 class="title-5 m-b-35">Powiadomienia</h3>
+
+                                <div class="table-responsive table-responsive-data2 table-active">
+                                    <table class="table table-data2">
+                                        <thead>
+                                            <tr>
+                                                 <th>Data</th>
+                                                <th>Element</th>
+                                                <th>Typ powiadomienia</th>
+                                                <th>Utworzył</th>
+                                                <th>Opis</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for noti in notifications %}
+                  {% for noti_d in notification_dev %}
+                      {% if noti_d.id_elem == noti.id_elem %}
+                      <tr>
+                        <td>{{ noti.date }}</td>
+                        <td>{{ noti_d.sensor_brand }}: {{ noti_d.sensor_name }} - <br>
+                        {{ noti_d.model }}</td>
+                        <td>{{ noti.type_of_notification }}</td>
+                        <td>{{ noti.author }}</td>
+                        <td>{{ noti.description }}</td>
+                      {% endif %}
+                      {% endfor %}
+                                                        <div class="table-data-feature">
+                                                            <div class="table-data-feature"><font style="opacity: 0">--</font></div>
+                                                            <form action="{{ url_for('noti_to_delete') }}" method="post" class="table-data-feature">
+                                                                <input type="hidden" value="{{ user.id }}" name="delete">
+                                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Usuń">
+                                                                    <i class="zmdi zmdi-delete"></i>
+                                                                </button>
+                                                            </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="spacer"></tr>
+                                    {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+        {% endblock %}
+                                <!-- END DATA TABLE -->
+
+            <!-- END DATA TABLE-->

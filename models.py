@@ -21,6 +21,7 @@ class MutableList(Mutable, list):
         else:
             return value
 
+
 class RolesUsers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
@@ -54,7 +55,7 @@ class Worker(db.Model):
 
 class Rooms(db.Model):
     id_room = db.Column(db.Integer, primary_key=True)
-    room_number = db.Column(db.Integer, unique=True)
+    room_number = db.Column(db.String(4), unique=True)
     floor = db.Column(db.Integer)
     description = db.Column(db.String(255))
     db.Column(MutableList.as_mutable(ARRAY(db.String(100))))

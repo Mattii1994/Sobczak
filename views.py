@@ -75,9 +75,22 @@ def register():
 
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
 
-    return render_template('index3.html', name=current_user.first_name, surname=current_user.surname)
+    sensors = Sensor.query.all()
+
+    return render_template('index3.html', name=current_user.first_name, surname=current_user.surname, sensors=sensor)
+
+@app.route('/room_info/<room>')
+@login_required
+def room_info(room):
+
+    room_information = Rooms.query.filter_by(room_name=room).first()
+    sensor = Sensor.query.filter_by(id_room=room_information.id_room).first()
+
+    return render_template('room_info.html', name=current_user.first_name, surname=current_user.surname, sensors=sensor,
+                           room_information=room_information)
 
 
 @app.route('/ref_noti')
@@ -126,11 +139,11 @@ def add_group():
     if request.method == 'POST':
         temp = request.form['group_name'].lower()
         exist = Role.query.filter_by(name=temp).count()
-        if exist == 0:
+        if exist != 0:
             flash(u'Podana grupa już istnieje!', 'danger')
             redirect(url_for('add_group'))
 
-        if request.form['description'] == '' or len(request.form['description'] <= 10):
+        if request.form['description'] == '' or len(request.form['description']) < 10:
             flash(u'Opis grupy jest za krótki.', 'danger')
             redirect(url_for('add_group'))
         else:
@@ -141,6 +154,27 @@ def add_group():
             redirect(url_for('users_groups'))
 
     return render_template('add_group.html', name=current_user.first_name, surname=current_user.surname)
+
+
+@app.route('/notification', methods=['POST'])
+@login_required
+def notification():
+
+    notifications = Notification.query.all
+    notification_dev = Sensor.query.all()
+    room = Rooms.query.all()
+
+    return render_template('notifications.html', notifications=notifications, notification_dev=notification_dev,
+                           room=room)
+
+
+@app.route('/delete_noti', methods=['POST', 'GET'])
+def delete_noti():
+    noti_to_delete = Notification.query.filter_by(id=request.form['noti_delete']).first()
+    db.session.delete(noti_to_delete)
+    db.session.commit()
+
+    return redirect(url_for('notification'))
 
 
 @app.route('/user_manager')
@@ -393,3 +427,75 @@ def check_sensors_alive():
         db.session.commit()
 
     return ip.alive
+
+"""Konwersja SVG na JPG"""
+
+from argparse import ArgumentParser
+import subprocess
+import os.path
+
+
+def main():
+    args = parse_args()
+    if not args.out:
+        args.out = os.path.splitext(args.file)[0] + '.png'
+    convert_with_rsvg(args)
+
+
+def convert_with_cairosvg_simple(args):
+    # import cairocffi as cairo
+    from cairosvg import svg2png
+    svg2png(open(args.file, 'rb').read(), write_to=open(args.out, 'wb'))
+
+
+def convert_with_cairosvg_sizes(args):
+    from cairosvg.surface import PNGSurface
+    width, height = args.size.split('x')
+    with open(args.file, 'rb') as svg_file:
+        PNGSurface.convert(
+            bytestring=svg_file.read(),
+            width=width,
+            height=height,
+            write_to=open(args.out, 'wb')
+            )
+
+def convert_with_rsvg(args):
+    import cairo
+    import rsvg
+
+    width, height = args.size.split('x')
+    img =  cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
+    ctx = cairo.Context(img)
+    handler= rsvg.Handle(args.file)
+    handler.render_cairo(ctx)
+    img.write_to_png(args.out)
+
+
+def convert_with_inkscape(args):
+    try:
+        inkscape_path = subprocess.check_output(["which", "inkscape"]).strip()
+    except subprocess.CalledProcessError:
+        print("ERROR: You need inkscape installed to use this script.")
+        exit(1)
+
+    export_width, export_height = args.size.split('x')
+
+    args = [
+        inkscape_path,
+        "--without-gui",
+        "-f", args.file,
+        "--export-area-page",
+        "-w", export_width,
+        "-h", export_height,
+        "--export-png=" + args.out
+    ]
+    print(args)
+    subprocess.check_call(args)
+
+
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument('-f', '--file', required=True, help="SVG file to open")
+    parser.add_argument('-s', '--size', required=True, help="target size to render")
+    parser.add_argument('-o', '--out', help="Destination file")
+    return parser.parse_args()
