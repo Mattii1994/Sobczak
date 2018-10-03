@@ -39,7 +39,7 @@
                 <div class="header3-wrap">
                     <div class="header__logo">
                         <a href="#">
-                            <img src="../static/images/icon/logo-white.png" alt="InIgnis" />
+                            <img src="../static/images/icon/InIgnis%20PNG%2021.png.pmh" alt="InIgnis" />
                         </a>
                     </div>
                     <div class="header__navbar">
@@ -56,10 +56,10 @@
                                     <span class="bot-line"></span>Plan budynku</a>
                                 <ul class="header3-sub-list list-unstyled">
                                     <li>
-                                        <a href="button.html"><span class="fas fa-mail-forward"></span> Drogi ewakuacji</a>
+                                        <a href="#"><span class="fas fa-mail-forward"></span> Drogi ewakuacji</a>
                                     </li>
                                     <li>
-                                        <a href="badge.html"><span class="fas fa-plus"></span> Dodaj/usuń drogę ewakuacji</a>
+                                        <a href="#"><span class="fas fa-plus"></span> Dodaj/usuń drogę ewakuacji</a>
                                     </li>
                                 </ul>
                             </li>
@@ -151,7 +151,7 @@
                                     <div class="info clearfix">
                                         <div class="image">
                                             <a href="#">
-                                                <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                                                <img src="images/icon/avatar-01.jpg" alt="{{ name }} {{ surname }}" />
                                             </a>
                                         </div>
                                         <div class="content">
@@ -189,7 +189,7 @@
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="index.html">
-                            <img src="images/icon/logo-white.png" alt="CoolAdmin" />
+                            <img src="images/icon/logo-white.png.png" alt="InIgnis" />
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -292,40 +292,12 @@
                             </div>
                         </div>
                         <div class="notifi__footer">
-                            <a href="#">All notifications</a>
+                            <a href="{{ url_for('notification') }}">Pokaż wszystkie powiadomienia</a>
                         </div>
                     </div>
                 </div>
                 <div class="header-button-item js-item-menu">
-                    <i class="zmdi zmdi-settings"></i>
-                    <div class="setting-dropdown js-dropdown">
-                        <div class="account-dropdown__body">
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-account"></i>Account</a>
-                            </div>
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-settings"></i>Setting</a>
-                            </div>
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-money-box"></i>Billing</a>
-                            </div>
-                        </div>
-                        <div class="account-dropdown__body">
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-globe"></i>Language</a>
-                            </div>
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-pin"></i>Location</a>
-                            </div>
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-email"></i>Email</a>
-                            </div>
+                    <i class="zmdi zmdi-settings"></i>>
                             <div class="account-dropdown__item">
                                 <a href="#">
                                     <i class="zmdi zmdi-notifications"></i>Notifications</a>
@@ -345,34 +317,34 @@
                             <div class="info clearfix">
                                 <div class="image">
                                     <a href="#">
-                                        <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                                        <img src="images/icon/avatar-01.jpg" alt="{{ name }} {{ surname }}" />
                                     </a>
                                 </div>
                                 <div class="content">
-                                    <h5 class="name">
-                                        <a href="#">john doe</a>
-                                    </h5>
-                                    <span class="email">johndoe@example.com</span>
-                                </div>
-                            </div>
-                            <div class="account-dropdown__body">
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-account"></i>Account</a>
-                                </div>
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-settings"></i>Setting</a>
-                                </div>
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-money-box"></i>Billing</a>
-                                </div>
-                            </div>
-                            <div class="account-dropdown__footer">
-                                <a href="#">
-                                    <i class="zmdi zmdi-power"></i>Logout</a>
-                            </div>
+                                     <a href="#">
+                                                <img src="images/icon/avatar-01.jpg" alt="{{ name }} {{ surname }}" />
+                                            </a>
+                                        </div>
+                                        <div class="content">
+                                            <h5 class="name">
+                                                <a href="#">{{ name }} {{ surname }}</a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div class="account-dropdown__body">
+                                        <div class="account-dropdown__item">
+                                            <a href="{{ url_for('account_info') }}">
+                                                <i class="zmdi zmdi-account"></i>Konto</a>
+                                        </div>
+                                        <div class="account-dropdown__item">
+                                            <a href="#">
+                                                <i class="zmdi zmdi-settings"></i>Ustawienia</a>
+                                        </div>
+                                    </div>
+                                    <div class="account-dropdown__footer">
+                                        <a href="{{ url_for('logout')}}">
+                                            <i class="zmdi zmdi-power"></i>Wyloguj</a>
+                                    </div>
                         </div>
                     </div>
                 </div>

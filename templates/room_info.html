@@ -1,10 +1,143 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-fgfgdf
-</body>
-</html>
+{% extends "header.html" %}
+{% block title %}Informacje o koncie {{ name }} {{ surname }}{% endblock %}
+{% block content %}
+    {{ super() }}
+
+        <!-- PAGE CONTENT-->
+        <div class="page-content--bgf7">
+            <!-- BREADCRUMB-->
+            <section class="au-breadcrumb2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="au-breadcrumb-content">
+                                <div class="au-breadcrumb-left">
+                                    <span class="au-breadcrumb-span">Jesteś tutaj:</span>
+                                    <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                        <li class="list-inline-item active">
+                                            <a href="{{ url_for('dashboard') }}">Panel sterowania</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END BREADCRUMB-->
+
+            <!-- WELCOME-->
+            <section class="welcome p-t-10">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="title-4">Witaj
+                                <span>{{ name }}</span>
+                            </h1>
+                            <hr class="line-seprate">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END WELCOME-->
+
+            <!-- STATISTIC-->
+            <section class="statistic statistic2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--green">
+                                <h2 class="number">0/0</h2>
+                                <span class="desc">liczba aktywnych czujników</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-check-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--orange">
+                                <h2 class="number">0</h2>
+                                <span class="desc">Zbliżające terminy przeglądów</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-calendar-remove"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--blue">
+                                <h2 class="number">1,086</h2>
+                                <span class="desc">this week</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-calendar-note"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--red">
+                                <h2 class="number">0</h2>
+                                <span class="desc">Liczba incydentów</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-fire"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END STATISTIC-->
+
+             <div class="section__content section__content--p35">
+                    <div class="container">
+                            <div class="row">
+                                <div class="col-md-4">
+                                <aside class="profile-nav alt">
+                                    <section class="card">
+                                        <div class="card-header user-header alt bg-dark">
+                                            <div class="media">
+                                                <a href="#">
+                                                    <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="images/icon/avatar-01.jpg">
+                                                </a>
+                                                <div class="media-body">
+                                                    <h2 class="text-light display-6">{{ name }} {{ surname }}</h2>
+                                                    <p>{{ role }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                <a href="#">
+                                                    <i class="fa fa-envelope-o"></i> Mail Inbox
+                                                    <span class="badge badge-primary pull-right">10</span>
+                                                </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <a href="#">
+                                                    <i class="fa fa-tasks"></i> Recent Activity
+                                                    <span class="badge badge-danger pull-right">15</span>
+                                                </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <a href="#">
+                                                    <i class="fa fa-bell-o"></i> Notification
+                                                    <span class="badge badge-success pull-right">11</span>
+                                                </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <a href="#">
+                                                    <i class="fa fa-comments-o"></i> Message
+                                                    <span class="badge badge-warning pull-right r-activity">03</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                    </section>
+                                </aside>
+                            </div>
+                            </div>
+                    </div>
+             </div>
+
+<!-- end document-->
+            {% endblock %}

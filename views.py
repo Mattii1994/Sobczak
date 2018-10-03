@@ -82,11 +82,13 @@ def dashboard():
 
     return render_template('index3.html', name=current_user.first_name, surname=current_user.surname, sensors=sensor)
 
+
 @app.route('/room_info/<room>')
+@app.route('/room_info/<path:room>')
 @login_required
 def room_info(room):
 
-    room_information = Rooms.query.filter_by(room_name=room).first()
+    room_information = Rooms.query.filter_by(room_number=room).first()
     sensor = Sensor.query.filter_by(id_room=room_information.id_room).first()
 
     return render_template('room_info.html', name=current_user.first_name, surname=current_user.surname, sensors=sensor,
@@ -156,7 +158,7 @@ def add_group():
     return render_template('add_group.html', name=current_user.first_name, surname=current_user.surname)
 
 
-@app.route('/notification', methods=['POST'])
+@app.route('/notification', methods=['POST', 'GET'])
 @login_required
 def notification():
 
@@ -397,6 +399,12 @@ def review_sensor_list():
 def sensor_signal_handler():
     if request.method == 'POST':
         ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+        change_state = Sensor.query.filter_by(ip_address=ip).first()
+        if change_state is True:
+            pass
+        else:
+            change_state.signal = True
+            redirect(url_for('dashboard'))
         print('OK')
     return 'OK'
 
