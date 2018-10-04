@@ -400,11 +400,6 @@ def sensor_signal_handler():
     if request.method == 'POST':
         ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
         change_state = Sensor.query.filter_by(ip_address=ip).first()
-        if change_state is True:
-            pass
-        else:
-            change_state.signal = True
-            redirect(url_for('dashboard'))
         print('OK')
     return 'OK'
 

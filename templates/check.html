@@ -5,7 +5,11 @@
     <title>Sprawdzanie dostępności czujnika</title>
 </head>
 <body>
-{{ response }}
-{{ sensor_ip }}
+{% if response == 0 %}
+Czujnik onine
+{% endif %}
+{% if response != 0 %}
+Czujnik ofline
+{% endif %}
 </body>
 </html>
